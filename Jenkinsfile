@@ -41,9 +41,16 @@ node {
     }}
 
     if (env.BRANCH_NAME == "dev") {
-      stage('DEV: Build Image') {
+      stage('DEV: Build') {
           /* This builds the solution */
           bat "dotnet build --configuration Release"
+
+    }}
+
+    if (env.BRANCH_NAME == "dev") {
+      stage('DEV: Pack') {
+          /* This builds the solution */
+          bat "dotnet pack --no-build --output nupkgs"
 
     }}
 
