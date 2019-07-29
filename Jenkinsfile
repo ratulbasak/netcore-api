@@ -51,7 +51,7 @@ node {
       stage('DEV: Pack') {
           /* This builds the solution */
           bat "dotnet pack --no-build --output nupkgs"
-          bat "ls nupkgs"
+          bat "dir nupkgs"
 
     }}
 
