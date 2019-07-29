@@ -51,7 +51,7 @@ node {
       stage('DEV: Pack') {
           /* This builds the solution */
           //bat "dotnet pack --no-build -c Release netcore-api.csproj /p:NuspecFile=nupkgs/netcore-api.1.0.${env.BUILD_NUMBER} /p:NuspecBasePath=nupkgs"
-          zip zipFile: "netcore-api.1.0.${env.BUILD_NUMBER}", archive: false, dir: 'Publish'
+          zip zipFile: "netcore-api.1.0.${env.BUILD_NUMBER}.zip", archive: false, dir: 'Publish'
           bat "dir"
 
     }}
