@@ -43,22 +43,24 @@ node {
     if (env.BRANCH_NAME == "dev") {
       stage('DEV: Build') {
           /* This builds the solution */
-          bat "dotnet build --configuration Release"
+          bat "dotnet build --configuration Release -o Publish"
 
     }}
 
     if (env.BRANCH_NAME == "dev") {
       stage('DEV: Pack') {
           /* This builds the solution */
-          bat "dotnet pack --no-build --output nupkgs"
-          bat "dir nupkgs"
+          //bat "dotnet pack --no-build -c Release netcore-api.csproj /p:NuspecFile=nupkgs/netcore-api.1.0.${env.BUILD_NUMBER} /p:NuspecBasePath=nupkgs"
+          zip zipFile: "netcore-api.1.0.${env.BUILD_NUMBER}", archive: false, dir: 'Publish'
+          bat "dir"
 
     }}
 
     if (env.BRANCH_NAME == "dev") {
       stage('DEV: Publish') {
           /* This builds the solution **\\nupkgs\\*.nupkg */
-          bat "dotnet nuget push *.nupkg -k c4c9eeb0-fc2f-4590-921e-a0b42f3d4cb6 -s https://www.myget.org/feed/Packages/netcoreapi-demo"
+          bat "dir"
+          //bat "dotnet nuget push *.nupkg -k c4c9eeb0-fc2f-4590-921e-a0b42f3d4cb6 -s https://www.myget.org/feed/Packages/netcoreapi-demo"
 
     }}
 
