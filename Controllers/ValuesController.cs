@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace netcore_api.Controllers
@@ -12,34 +10,53 @@ namespace netcore_api.Controllers
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<CurrentDateTime> Get()
         {
-            return new String[] { "DateTime", DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffff‌​K") };
+            return new CurrentDateTime();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            return WeekDays.GetDayName(id);
+        }
+    }
+
+    public static class WeekDays
+    {
+        private static readonly string[] weekDays = new string[] { "Saturday", "Saturday", "Saturday", "Saturday", "Saturday", "Saturday", "Saturday" };
+
+        public static string GetDayName(int dayNumber)
+        {
+            if (dayNumber > 7 || dayNumber < 1)
+            {
+                return "No such week day";
+            }
+
+            return weekDays[dayNumber - 1];
+        }
+    }
+
+
+    public class CurrentDateTime
+    {
+        private readonly DateTime currentDateTime;
+        public CurrentDateTime()
+        {
+            currentDateTime = DateTime.UtcNow;
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        public int Day { get { return currentDateTime.Day; } }
+        public int Month { get { return currentDateTime.Month; } }
+        public int Year { get { return currentDateTime.Year; } }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        public int Second { get { return currentDateTime.Second; } }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        public int Hour { get { return currentDateTime.Hour; } }
+
+        public int Minute { get { return currentDateTime.Minute; } }
+
+        public string CurrentTime { get { return currentDateTime.ToString(); } }
     }
 }
