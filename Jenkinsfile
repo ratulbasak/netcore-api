@@ -51,13 +51,14 @@ node {
       stage('DEV: Pack') {
           /* This builds the solution */
           bat "dotnet pack --no-build --output nupkgs"
+          bat "ls nupkgs"
 
     }}
 
     if (env.BRANCH_NAME == "dev") {
       stage('DEV: Publish') {
-          /* This builds the solution */
-          bat "dotnet nuget push **\\nupkgs\\*.nupkg -k c4c9eeb0-fc2f-4590-921e-a0b42f3d4cb6 -s https://www.myget.org/feed/Packages/netcoreapi-demo"
+          /* This builds the solution **\\nupkgs\\*.nupkg */
+          bat "dotnet nuget push *.nupkg -k c4c9eeb0-fc2f-4590-921e-a0b42f3d4cb6 -s https://www.myget.org/feed/Packages/netcoreapi-demo"
 
     }}
 
