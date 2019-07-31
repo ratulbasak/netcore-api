@@ -71,4 +71,24 @@ node {
     //      bat "echo 'test passed'"
     // }
 
+    if (env.BRANCH_NAME == "dev") {
+      stage('DEV: Deploy Artifact') {
+          /* This builds the solution **\\nupkgs\\*.nupkg */
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+            // stage("SSH Steps Rocks!") {
+            //     writeFile file: 'abc.sh', text: 'ls'
+            //     sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
+            //     sshPut remote: remote, from: 'abc.sh', into: '.'
+            //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
+            //     sshScript remote: remote, script: 'abc.sh'
+            //     sshRemove remote: remote, path: 'abc.sh'
+            //     }
+            bat "echo %USERNAME%"
+            bat "echo %PASSWORD%"
+            bat "dir"
+        }
+
+    }}
+
 }
