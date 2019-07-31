@@ -8,6 +8,17 @@ node {
 
 
     if (env.BRANCH_NAME == "dev") {
+      if (env.BRANCH_NAME == "dev") {
+        stage('Cleaning ENV') {
+            bat "IF EXIST Publish RMDIR /S /Q Publish"
+            bat "IF EXIST obj RMDIR /S /Q obj"
+            bat "IF EXIST bin RMDIR /S /Q bin"
+            // deleteDir()
+            dir("${workspace}@tmp") {
+                  deleteDir()
+              }
+        }
+      }
       stage('Clone repository') {
           /* repository cloned to our workspace */
           checkout scm
@@ -23,8 +34,8 @@ node {
       }
       stage('DEV: Build') {
           /* This builds the solution */
-          // bat "dotnet publish -c Release -r win10-x64"
-          bat "dotnet build --configuration Release -o Publish"
+          bat "dotnet publish -c Release -r win10-x64 -o Publish"
+          // bat "dotnet build --configuration Release -o Publish"
 
       }
       stage('DEV: Pack') {
@@ -45,40 +56,36 @@ node {
 
 
     /* This builds the solution **\\nupkgs\\*.nupkg */
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
-    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-    {
-      remote.name = 'appserver'
-      remote.host = "${env.ServerIP}"
-      remote.user = "${USERNAME}"
-      remote.password = "${PASSWORD}"
-      remote.allowAnyHosts = true
-      if (env.BRANCH_NAME == "dev") {
-        stage('DEV: Deploy Artifact') {
-          sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
-          sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
-        }
-        stage('DEV: Run Application') {
-          sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/*"
-          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
-          sshCommand remote: remote, command: "sudo systemctl restart netcore-api.service"
-          // for extracting into multiple directory: ${PACKAGE_NAME}
-          //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
-          //     sshScript remote: remote, script: 'abc.sh'
-          //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
-        }
-      }
-
-    }
+    // withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
+    // usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+    // {
+    //   remote.name = 'appserver'
+    //   remote.host = "${env.ServerIP}"
+    //   remote.user = "${USERNAME}"
+    //   remote.password = "${PASSWORD}"
+    //   remote.allowAnyHosts = true
+    //   if (env.BRANCH_NAME == "dev") {
+    //     stage('DEV: Deploy Artifact') {
+    //       sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
+    //       sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
+    //     }
+    //     stage('DEV: Run Application') {
+    //       sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/*"
+    //       sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
+    //       sshCommand remote: remote, command: "sudo systemctl restart netcore-api.service"
+    //       // for extracting into multiple directory: ${PACKAGE_NAME}
+    //       //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
+    //       //     sshScript remote: remote, script: 'abc.sh'
+    //       //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
+    //     }
+    //   }
+    //
+    // }
 
     if (env.BRANCH_NAME == "dev") {
-      stage('Cleaning ENV') {
-          // bat "IF EXIST Publish RMDIR /S /Q Publish"
-          deleteDir()
-          dir("${workspace}@tmp") {
-                deleteDir()
-            }
-      }
+        stage('DEV: Deploy') {
+          bat "powershell scripts/deploy.ps1"
+        }
     }
 
 }
