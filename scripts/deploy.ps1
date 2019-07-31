@@ -1,11 +1,14 @@
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force -Scope Process
+Import-Module Webadministration
+
 $PACKAGE_NAME=$args[0]
 
 $serviceName = "netcoreapi"
 $DOCDIR = "C:\netcore-api"
 $FolderPath = "$DOCDIR\Publish"
 
-$message = "Found {0} zip files: `r`n`r`n{1}" -f $file.Count, ("{0} - {1}" -f $file.FullName, $file.LastWriteTime)
-echo $message
+# $message = "Found {0} zip files: `r`n`r`n{1}" -f $file.Count, ("{0} - {1}" -f $file.FullName, $file.LastWriteTime)
+# echo $message
 
 if(!(Test-Path -Path $DOCDIR )){
   New-Item -ItemType directory -Path $DOCDIR
