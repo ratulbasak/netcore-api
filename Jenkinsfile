@@ -9,8 +9,13 @@ node {
     if (env.BRANCH_NAME == "dev") {
       stage('Cleaning ENV') {
 
-          bat "IF EXIST Publish RMDIR /S /Q Publish"
-          bat "DEL /S /Q /F *.zip"
+          // bat "IF EXIST Publish RMDIR /S /Q Publish"
+          // bat "IF EXIST obj RMDIR /S /Q obj"
+          // bat "DEL /S /Q /F *.zip"
+          deleteDir()
+          dir("${workspace}@tmp") {
+                deleteDir()
+            }
     }}
 
 
