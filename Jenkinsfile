@@ -1,14 +1,6 @@
-def DEV_CONTAINER_NAME="dev-netcoreapi"
-def CONTAINER_TAG="latest"
-def DEV_NAMESPACE="netcoreapi"
-
 def SERVICE_NAME="netcoreapi"
+def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.1.0.${env.BUILD_NUMBER}.zip"
 
-def STG_NAMESPACE="netcoreapi"
-def STG_CONTAINER_NAME="stg-netcoreapi"
-
-def PROD_NAMESPACE="prod-netcoreapi"
-def PROD_CONTAINER_NAME="prod-netcoreapi"
 
 node {
     def remote = [:]
@@ -53,7 +45,7 @@ node {
       stage('DEV: Pack') {
           /* This builds the solution */
           //bat "dotnet pack --no-build -c Release netcore-api.csproj /p:NuspecFile=nupkgs/netcore-api.1.0.${env.BUILD_NUMBER} /p:NuspecBasePath=nupkgs"
-          zip zipFile: "netcore-api.1.0.${env.BUILD_NUMBER}.zip", archive: false, dir: 'Publish'
+          zip zipFile: "${PACKAGE_NAME}", archive: false, dir: 'Publish'
           bat "dir"
 
     }}
@@ -78,13 +70,13 @@ node {
     {
       remote.name = 'test'
       remote.host = "${env.ServerIP}"
-      remote.user = 'ubuntu'
-      remote.password = "${env.PASSWORD}"
+      remote.user = "${USERNAME}"
+      remote.password = "${PASSWORD}"
       remote.allowAnyHosts = true
       if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy Artifact') {
           //     writeFile file: 'abc.sh', text: 'ls'
-          sshPut remote: remote, from: "netcore-api.1.0.${env.BUILD_NUMBER}.zip", into: "deployments/${env.BRANCH_NAME}/"
+          sshPut remote: remote, from: "${PACKAGE_NAME}", into: "deployments/packages/"
           sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
           //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
           //     sshScript remote: remote, script: 'abc.sh'
