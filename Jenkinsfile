@@ -30,6 +30,7 @@ node {
       }
       stage('DEV: Build') {
           /* This builds the solution */
+          // bat "dotnet publish -c Release -r win10-x64"
           bat "dotnet build --configuration Release -o Publish"
 
       }
