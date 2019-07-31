@@ -6,68 +6,49 @@ node {
     def remote = [:]
     def app
 
+
     if (env.BRANCH_NAME == "dev") {
       stage('Cleaning ENV') {
-
           // bat "IF EXIST Publish RMDIR /S /Q Publish"
-          // bat "IF EXIST obj RMDIR /S /Q obj"
-          // bat "DEL /S /Q /F *.zip"
           deleteDir()
           dir("${workspace}@tmp") {
                 deleteDir()
             }
-    }}
-
-
-    stage('Clone repository') {
-        /* repository cloned to our workspace */
-        checkout scm
-    }
-
-
-
-    if (env.BRANCH_NAME == "dev") {
+      }
+      stage('Clone repository') {
+          /* repository cloned to our workspace */
+          checkout scm
+      }
       stage('DEV: Restore Packages') {
           /* This restoring of the packages of the application. */
           bat "dotnet restore"
-    }}
-
-    if (env.BRANCH_NAME == "dev") {
+      }
       stage('DEV: Clean') {
           /* This clean the solution. */
           bat "dotnet clean"
 
-    }}
-
-    if (env.BRANCH_NAME == "dev") {
+      }
       stage('DEV: Build') {
           /* This builds the solution */
           bat "dotnet build --configuration Release -o Publish"
 
-    }}
-
-    if (env.BRANCH_NAME == "dev") {
+      }
       stage('DEV: Pack') {
-          /* This builds the solution */
-          //bat "dotnet pack --no-build -c Release netcore-api.csproj /p:NuspecFile=nupkgs/netcore-api.1.0.${env.BUILD_NUMBER} /p:NuspecBasePath=nupkgs"
+          /* This will create zip */
           zip zipFile: "${PACKAGE_NAME}.zip", archive: false, dir: 'Publish'
           bat "dir"
 
-    }}
+      }
+    }
 
-    if (env.BRANCH_NAME == "dev") {
-      stage('DEV: Publish') {
-          /* This builds the solution **\\nupkgs\\*.nupkg */
-          bat "dir"
-          //bat "dotnet nuget push *.nupkg -k c4c9eeb0-fc2f-4590-921e-a0b42f3d4cb6 -s https://www.myget.org/feed/Packages/netcoreapi-demo"
-
-    }}
 
 
     // stage('Test') {
     //
     //      bat "echo 'test passed'"
     // }
+
+
 
     /* This builds the solution **\\nupkgs\\*.nupkg */
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
