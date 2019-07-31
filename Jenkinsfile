@@ -17,7 +17,8 @@ node {
     if (env.BRANCH_NAME == "dev") {
       stage('Cleaning ENV') {
 
-          bat "echo 'test'"
+          bat "IF EXIST Publish RMDIR /S /Q Publish"
+          bat "DEL /S /Q /F *.zip"
     }}
 
 
@@ -66,35 +67,29 @@ node {
     }}
 
 
-
     // stage('Test image') {
     //
     //      bat "echo 'test passed'"
     // }
 
-    if (env.BRANCH_NAME == "dev") {
-      stage('DEV: Deploy Artifact') {
-          /* This builds the solution **\\nupkgs\\*.nupkg */
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
-                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                      remote.name = 'test'
-            remote.host = '52.29.113.22'
-            remote.user = 'ubuntu'
-            remote.password = 'Selise@5033#'
-            remote.allowAnyHosts = true
-            // stage("SSH Steps Rocks!") {
-            //     writeFile file: 'abc.sh', text: 'ls'
-            sshCommand remote: remote, command: 'ls -al'
-            //     sshPut remote: remote, from: 'abc.sh', into: '.'
-            //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
-            //     sshScript remote: remote, script: 'abc.sh'
-            //     sshRemove remote: remote, path: 'abc.sh'
-            //     }
-            bat "echo ${USERNAME}"
-            // bat "putty.exe -ssh ubuntu@52.29.113.22 -pw Selise@5033#"
-            bat "dir"
-        }
+    /* This builds the solution **\\nupkgs\\*.nupkg */
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
+    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+    {
+      remote.host = "${env.ServerIP}"
+      remote.user = 'ubuntu'
+      remote.password = "${env.PASSWORD}"
+      remote.allowAnyHosts = true
+      if (env.BRANCH_NAME == "dev") {
+        stage('DEV: Deploy Artifact') {
+          //     writeFile file: 'abc.sh', text: 'ls'
+          sshPut remote: remote, from: "netcore-api.1.0.${env.BUILD_NUMBER}.zip", into: "deployments/${env.BRANCH_NAME}/"
+          sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
+          //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
+          //     sshScript remote: remote, script: 'abc.sh'
+          //     sshRemove remote: remote, path: 'abc.sh'
+      }}
 
-    }}
+    }
 
 }
