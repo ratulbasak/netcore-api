@@ -1,5 +1,5 @@
 def SERVICE_NAME="netcoreapi"
-def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.1.0.${env.BUILD_NUMBER}.zip"
+def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.1.0.${env.BUILD_NUMBER}"
 
 
 node {
@@ -45,7 +45,7 @@ node {
       stage('DEV: Pack') {
           /* This builds the solution */
           //bat "dotnet pack --no-build -c Release netcore-api.csproj /p:NuspecFile=nupkgs/netcore-api.1.0.${env.BUILD_NUMBER} /p:NuspecBasePath=nupkgs"
-          zip zipFile: "${PACKAGE_NAME}", archive: false, dir: 'Publish'
+          zip zipFile: "${PACKAGE_NAME}.zip", archive: false, dir: 'Publish'
           bat "dir"
 
     }}
@@ -59,7 +59,7 @@ node {
     }}
 
 
-    // stage('Test image') {
+    // stage('Test') {
     //
     //      bat "echo 'test passed'"
     // }
@@ -76,8 +76,9 @@ node {
       if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy Artifact') {
           //     writeFile file: 'abc.sh', text: 'ls'
-          sshPut remote: remote, from: "${PACKAGE_NAME}", into: "deployments/packages/"
+          sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
           sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
+          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${PACKAGE_NAME}"
           //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
           //     sshScript remote: remote, script: 'abc.sh'
           //     sshRemove remote: remote, path: 'abc.sh'
