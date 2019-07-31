@@ -8,13 +8,6 @@ node {
 
 
     if (env.BRANCH_NAME == "dev") {
-      stage('Cleaning ENV') {
-          // bat "IF EXIST Publish RMDIR /S /Q Publish"
-          deleteDir()
-          dir("${workspace}@tmp") {
-                deleteDir()
-            }
-      }
       stage('Clone repository') {
           /* repository cloned to our workspace */
           checkout scm
@@ -76,6 +69,16 @@ node {
         }
       }
 
+    }
+
+    if (env.BRANCH_NAME == "dev") {
+      stage('Cleaning ENV') {
+          // bat "IF EXIST Publish RMDIR /S /Q Publish"
+          deleteDir()
+          dir("${workspace}@tmp") {
+                deleteDir()
+            }
+      }
     }
 
 }
