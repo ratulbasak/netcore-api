@@ -79,7 +79,7 @@ node {
           sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
         }
         stage('DEV: Run Application') {
-          sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}/*"
+          sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
           sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
           sshCommand remote: remote, command: "sudo systemctl restart netcore-api.service"
           // for extracting into multiple directory: ${PACKAGE_NAME}
