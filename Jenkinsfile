@@ -76,6 +76,7 @@ node {
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
     {
+      remote.name = 'test'
       remote.host = "${env.ServerIP}"
       remote.user = 'ubuntu'
       remote.password = "${env.PASSWORD}"
