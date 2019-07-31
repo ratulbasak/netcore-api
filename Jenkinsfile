@@ -11,6 +11,7 @@ def PROD_NAMESPACE="prod-netcoreapi"
 def PROD_CONTAINER_NAME="prod-netcoreapi"
 
 node {
+    def remote = [:]
     def app
 
     if (env.BRANCH_NAME == "dev") {
@@ -76,16 +77,21 @@ node {
           /* This builds the solution **\\nupkgs\\*.nupkg */
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                      remote.name = 'test'
+            remote.host = '52.29.113.22'
+            remote.user = 'ubuntu'
+            remote.password = 'Selise@5033#'
+            remote.allowAnyHosts = true
             // stage("SSH Steps Rocks!") {
             //     writeFile file: 'abc.sh', text: 'ls'
-            // sshCommand remote: remote, command: 'dir'
+            sshCommand remote: remote, command: 'ls -al'
             //     sshPut remote: remote, from: 'abc.sh', into: '.'
             //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
             //     sshScript remote: remote, script: 'abc.sh'
             //     sshRemove remote: remote, path: 'abc.sh'
             //     }
             bat "echo ${USERNAME}"
-            bat "echo ${PASSWORD}"
+            // bat "putty.exe -ssh ubuntu@52.29.113.22 -pw Selise@5033#"
             bat "dir"
         }
 
