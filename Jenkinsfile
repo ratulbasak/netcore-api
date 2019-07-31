@@ -84,7 +84,7 @@ node {
 
     if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy') {
-          bat "powershell scripts/deploy.ps1"
+          bat "powershell scripts/deploy.ps1 ${workspace}/${PACKAGE_NAME}"
         }
     }
 
