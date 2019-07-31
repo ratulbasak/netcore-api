@@ -75,14 +75,18 @@ node {
       remote.allowAnyHosts = true
       if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy Artifact') {
-          //     writeFile file: 'abc.sh', text: 'ls'
           sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
           sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
-          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${PACKAGE_NAME}"
+        }
+        stage('DEV: Run Application') {
+          sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}"
+          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
+          sshCommand remote: remote, command: "sudo systemctl restart netcore-api.service"
+          // for extracting into multiple directory: ${PACKAGE_NAME}
           //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
           //     sshScript remote: remote, script: 'abc.sh'
-          //     sshRemove remote: remote, path: 'abc.sh'
-      }}
+        }
+      }
 
     }
 
