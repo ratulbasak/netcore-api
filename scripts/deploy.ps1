@@ -21,12 +21,14 @@ echo "Copying zip file"
 
 
 $BaseFileName = @(gci $PACKAGE | % {$_.BaseName})
+echo "$PACKAGE"
+echo "$PACKAGE_NAME"
 echo "Renaming DONE"
 
 $extractDestination = "$DOCDIR\Sites"
 
 echo "Extracting the zip folder... ...."
-Expand-Archive -Path $PACKAGE_NAME -DestinationPath $extractDestination\$BaseFileName -Force
+Expand-Archive -Path "$PACKAGE_NAME" -DestinationPath $extractDestination\$BaseFileName -Force
 echo "Extraction DONE"
 
 if (!(Test-Path IIS:\Sites\$serviceName -pathType container))
