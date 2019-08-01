@@ -1,4 +1,4 @@
-Set-ExecutionPolicy -Scope CurrentUser Unrestricted -Force
+# Set-ExecutionPolicy -Scope CurrentUser Unrestricted -Force
 Import-Module Webadministration
 
 $PACKAGE_NAME=$args[0]
