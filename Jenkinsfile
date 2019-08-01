@@ -84,7 +84,7 @@ node {
 
     if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy') {
-          bat "powershell -ExecutionPolicy ByPass -File scripts/deploy.ps1 '${workspace}\\${PACKAGE_NAME}.zip'"
+          bat "powershell -ExecutionPolicy ByPass -File scripts/deploy.ps1 '${workspace}\\${PACKAGE_NAME}.zip' ${PACKAGE_NAME}.zip"
         }
     }
 
