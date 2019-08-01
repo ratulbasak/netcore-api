@@ -20,8 +20,8 @@ if(!(Test-Path -Path $DOCDIR )){
 echo "Copying zip file"
 
 
-$BaseFileName = @(gci $PACKAGE | % {$_.BaseName})
-echo "$PACKAGE"
+$BaseFileName = @(gci "'$PACKAGE'" | % {$_.BaseName})
+echo "'$PACKAGE'"
 echo "$PACKAGE_NAME"
 echo "Renaming DONE"
 
