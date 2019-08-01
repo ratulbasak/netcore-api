@@ -2,7 +2,6 @@
 Import-Module Webadministration
 
 $PACKAGE_NAME=$args[0]
-$PACKAGE=$args[1]
 
 $serviceName = "netcoreapi"
 $DOCDIR = "C:\netcore-api"
@@ -20,8 +19,8 @@ if(!(Test-Path -Path $DOCDIR )){
 echo "Copying zip file"
 
 
-$BaseFileName = @(gci "'$PACKAGE'" | % {$_.BaseName})
-echo "'$PACKAGE'"
+$BaseFileName = @(gci $PACKAGE_NAME | % {$_.BaseName})
+
 echo "$PACKAGE_NAME"
 echo "Renaming DONE"
 
