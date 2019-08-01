@@ -1,4 +1,4 @@
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force -Scope Process
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned -Force
 Import-Module Webadministration
 
 $PACKAGE_NAME=$args[0]
