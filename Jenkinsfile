@@ -68,9 +68,9 @@ node {
           sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
         }
         stage('DEV: Run Application') {
-          sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/*"
+          sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/${SUBDOMAIN}*"
           sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${SUBDOMAIN}/"
-          sshScript remote: remote, script: "deployments/systemd/deploy.sh ${SUBDOMAIN} ${env.BRANCH_NAME}"
+          sshScript remote: remote, script: "scripts/deploy.sh ${SUBDOMAIN} ${env.BRANCH_NAME}"
           // sshCommand remote: remote, command: "systemctl restart netcore-api.service"
           // for extracting into multiple directory: ${PACKAGE_NAME}
           //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
