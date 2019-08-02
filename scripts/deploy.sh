@@ -11,7 +11,7 @@ SYSTEMD_FILE="/etc/systemd/system/netcore-$BRANCH_NAME-$DOMAIN.service"
 UpdateSystemD() {
   echo "copying systemd file..."
   cp $SERVICE_PATH $SYSTEMD_FILE
-  sed -i "s/WorkingDirectory.*/WorkingDirectory=$PROJECT_PATH/" $SYSTEMD_FILE
+  sed -i "s/WorkingDirectory.*/WorkingDirectory=\/root\/deployments\/$BRANCH_NAME\/$DOMAIN/" $SYSTEMD_FILE
 }
 
 CheckFile() {
@@ -26,7 +26,7 @@ CheckFile() {
 Main() {
   CheckFile
   systemctl daemon-reload
-  systemctl restart $SYSTEMD_FILE 
+  systemctl restart $SYSTEMD_FILE
 }
 
 Main
