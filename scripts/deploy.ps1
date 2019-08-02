@@ -22,10 +22,10 @@ echo "Copying zip file"
 $BaseFileName = @(gci $PACKAGE_NAME | % {$_.BaseName})
 
 echo "$PACKAGE_NAME, $BaseFileName"
-echo "$extractDestination\$BaseFileName"
 echo "Renaming DONE"
 
 $extractDestination = "$DOCDIR\Sites"
+echo "$extractDestination\$BaseFileName"
 
 echo "Extracting the zip folder... ...."
 Expand-Archive -Path "$PACKAGE_NAME" -DestinationPath $extractDestination\$BaseFileName -Force
