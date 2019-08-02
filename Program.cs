@@ -8,7 +8,7 @@ namespace netcore_api
         public static void Main(string[] args)
         {
           CreateWebHostBuilder(args)
-	        .UseUrls("http://0.0.0.0:5001/")
+	        .UseUrls("http://0.0.0.0:5002/")
 	        .Build()
           .Run();
         }

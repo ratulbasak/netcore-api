@@ -1,5 +1,5 @@
 def SERVICE_NAME="netcoreapi"
-def SUBDOMAIN="sub1"
+def SUBDOMAIN="sub2"
 def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.${SUBDOMAIN}.1.0.${env.BUILD_NUMBER}"
 
 node {
