@@ -1,5 +1,5 @@
 def SERVICE_NAME="netcoreapi"
-def SUBDOMAIN="sub2"
+def SUBDOMAIN="sub0"
 def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.${SUBDOMAIN}.1.0.${env.BUILD_NUMBER}"
 
 node {
@@ -45,12 +45,9 @@ node {
     }
 
 
-
-    // stage('Test') {
-    //
-    //      bat "echo 'test passed'"
-    // }
-
+    stage('Test') {
+         bat "echo 'test passed'"
+    }
 
 
     /* This SSH Session deploys app into AppServer */
@@ -58,7 +55,7 @@ node {
     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
     {
       remote.name = 'appserver'
-      remote.host = "${env.ServerIP}"
+      remote.host = "${env.ServerIP}"  //From ENVIRONMENT VARIABLE
       remote.user = "${USERNAME}"
       remote.password = "${PASSWORD}"
       remote.allowAnyHosts = true
