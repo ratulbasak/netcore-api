@@ -84,7 +84,8 @@ node {
 
     if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy') {
-          bat "powershell -ExecutionPolicy ByPass -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
+          bat "powershell "
+          bat "powershell -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
         }
     }
 
