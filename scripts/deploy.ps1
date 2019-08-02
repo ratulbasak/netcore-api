@@ -1,7 +1,7 @@
 # Set-ExecutionPolicy -Scope CurrentUser Unrestricted -Force
 Import-Module Webadministration
 
-$PACKAGE_NAME = $args[0]
+$PACKAGE_NAME = "$args[0]"
 
 $serviceName = "netcoreapi"
 $DOCDIR = "C:\netcore-api"
@@ -30,10 +30,10 @@ echo "Extracting the zip folder... ...."
 Expand-Archive -Path "$PACKAGE_NAME" -DestinationPath $extractDestination\$BaseFileName -Force
 echo "Extraction DONE"
 
-if (!(Test-Path IIS:\Sites\$serviceName -pathType container))
-{
-    New-Item IIS:\Sites\$serviceName -bindings @{protocol="http";bindingInformation=":80:" + $serviceName} -physicalPath $extractDestination\$BaseFileName
-}
+# if (!(Test-Path IIS:\Sites\$serviceName -pathType container))
+# {
+#     New-Item IIS:\Sites\$serviceName -bindings @{protocol="http";bindingInformation=":80:" + $serviceName} -physicalPath $extractDestination\$BaseFileName
+# }
 
 Set-ItemProperty IIS:\Sites\$serviceName -name  physicalPath -value "$extractDestination\$BaseFileName"
 echo "Changed $serviceName SourePath in IIS..."

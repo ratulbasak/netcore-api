@@ -25,7 +25,7 @@ node {
       }
       stage('DEV: Restore Packages') {
           /* This restoring of the packages of the application. */
-          bat "dotnet restore"
+          bat "dotnet restore netcore-api.sln"
       }
       stage('DEV: Clean') {
           /* This clean the solution. */
@@ -34,7 +34,7 @@ node {
       }
       stage('DEV: Build') {
           /* This builds the solution */
-          bat "dotnet publish -c Release -r win10-x64 -o Publish"
+          bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x64"
           // bat "dotnet build --configuration Release -o Publish"
 
       }
