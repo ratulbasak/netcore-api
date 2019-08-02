@@ -1,6 +1,6 @@
 def SERVICE_NAME="netcoreapi"
-def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.1.0.${env.BUILD_NUMBER}"
-
+def SUBDOMAIN="sub1"
+def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.${SUBDOMAIN}.1.0.${env.BUILD_NUMBER}"
 
 node {
     def remote = [:]
@@ -71,7 +71,7 @@ node {
         }
         stage('DEV: Run Application') {
           sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/*"
-          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
+          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${SUBDOMAIN}/"
           sshCommand remote: remote, command: "systemctl restart netcore-api.service"
           // for extracting into multiple directory: ${PACKAGE_NAME}
           //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
