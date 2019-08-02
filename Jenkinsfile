@@ -34,8 +34,8 @@ node {
       }
       stage('DEV: Build') {
           /* This builds the solution */
-          bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x86"
-          // bat "dotnet build --configuration Release -o Publish"
+          // bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x86"
+          bat "dotnet build --configuration Release -o Publish"
 
       }
       stage('DEV: Pack') {
@@ -56,39 +56,39 @@ node {
 
 
     /* This builds the solution **\\nupkgs\\*.nupkg */
-    // withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Deployment.Server',
-    // usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-    // {
-    //   remote.name = 'appserver'
-    //   remote.host = "${env.ServerIP}"
-    //   remote.user = "${USERNAME}"
-    //   remote.password = "${PASSWORD}"
-    //   remote.allowAnyHosts = true
-    //   if (env.BRANCH_NAME == "dev") {
-    //     stage('DEV: Deploy Artifact') {
-    //       sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
-    //       sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
-    //     }
-    //     stage('DEV: Run Application') {
-    //       sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/*"
-    //       sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
-    //       sshCommand remote: remote, command: "sudo systemctl restart netcore-api.service"
-    //       // for extracting into multiple directory: ${PACKAGE_NAME}
-    //       //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
-    //       //     sshScript remote: remote, script: 'abc.sh'
-    //       //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
-    //     }
-    //   }
-    //
-    // }
-
-    if (env.BRANCH_NAME == "dev") {
-      def Powershell_V="%SystemRoot%\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
-        stage('DEV: Deploy') {
-          bat "${Powershell_V} Import-Module Webadministration"
-          bat "${Powershell_V} GET-IISSite"
-          bat "${Powershell_V} -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AppServer',
+    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+    {
+      remote.name = 'appserver'
+      remote.host = "${env.ServerIP}"
+      remote.user = "${USERNAME}"
+      remote.password = "${PASSWORD}"
+      remote.allowAnyHosts = true
+      if (env.BRANCH_NAME == "dev") {
+        stage('DEV: Deploy Artifact') {
+          sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
+          sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
         }
+        stage('DEV: Run Application') {
+          sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/*"
+          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/"
+          sshCommand remote: remote, command: "systemctl restart netcore-api.service"
+          // for extracting into multiple directory: ${PACKAGE_NAME}
+          //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
+          //     sshScript remote: remote, script: 'abc.sh'
+          //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
+        }
+      }
+
     }
+
+    // if (env.BRANCH_NAME == "dev") {
+    //   def Powershell_V="%SystemRoot%\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
+    //     stage('DEV: Deploy') {
+    //       bat "${Powershell_V} Import-Module Webadministration"
+    //       bat "${Powershell_V} GET-IISSite"
+    //       bat "${Powershell_V} -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
+    //     }
+    // }
 
 }
