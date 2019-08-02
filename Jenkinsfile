@@ -84,7 +84,7 @@ node {
 
     if (env.BRANCH_NAME == "dev") {
         stage('DEV: Deploy') {
-          bat "powershell "
+          bat "powershell Import-Module Webadministration"
           bat "powershell -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
         }
     }
