@@ -8,16 +8,14 @@ node {
 
 
     if (env.BRANCH_NAME == "dev") {
-      if (env.BRANCH_NAME == "dev") {
-        stage('Cleaning ENV') {
-            bat "IF EXIST Publish RMDIR /S /Q Publish"
-            bat "IF EXIST obj RMDIR /S /Q obj"
-            bat "IF EXIST bin RMDIR /S /Q bin"
-            // deleteDir()
-            dir("${workspace}@tmp") {
-                  deleteDir()
-              }
-        }
+      stage('Cleaning ENV') {
+          bat "IF EXIST Publish RMDIR /S /Q Publish"
+          bat "IF EXIST obj RMDIR /S /Q obj"
+          bat "IF EXIST bin RMDIR /S /Q bin"
+          // deleteDir()
+          dir("${workspace}@tmp") {
+                deleteDir()
+            }
       }
       stage('Clone repository') {
           /* repository cloned to our workspace */
