@@ -1,0 +1,14 @@
+[Unit]
+Description=Dotnet Core Demo service
+
+[Service]
+ExecStart=/usr/bin/dotnet netcore-api.dll
+WorkingDirectory=/root/deployments/dev
+User=root
+Group=root
+Restart=on-failure
+SyslogIdentifier=dotnet-sample-service
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
