@@ -86,6 +86,7 @@ node {
       def Powershell_V="%SystemRoot%\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
         stage('DEV: Deploy') {
           bat "${Powershell_V} Import-Module Webadministration"
+          bat "${Powershell_V} GET-IISSite"
           bat "${Powershell_V} -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
         }
     }

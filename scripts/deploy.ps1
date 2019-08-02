@@ -7,8 +7,8 @@ $serviceName = "netcoreapi"
 $DOCDIR = "C:\netcore-api"
 $FolderPath = "$DOCDIR\Publish"
 
-# $message = "Found {0} zip files: `r`n`r`n{1}" -f $file.Count, ("{0} - {1}" -f $file.FullName, $file.LastWriteTime)
-# echo $message
+echo "Getting architechture..."
+if([IntPtr]::size -eq 8) { Write-Host 'x64' } else { Write-Host 'x86' }
 
 if(!(Test-Path -Path $DOCDIR )){
   New-Item -ItemType directory -Path $DOCDIR
@@ -26,6 +26,8 @@ echo "Renaming DONE"
 
 $extractDestination = "$DOCDIR\Sites"
 echo "$extractDestination\$BaseFileName"
+
+GET-IISSite
 
 echo "Extracting the zip folder... ...."
 Expand-Archive -Path "$PACKAGE_NAME" -DestinationPath $extractDestination\$BaseFileName -Force
