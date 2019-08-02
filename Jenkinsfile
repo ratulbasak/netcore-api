@@ -34,7 +34,7 @@ node {
       }
       stage('DEV: Build') {
           /* This builds the solution */
-          bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x64"
+          bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x86"
           // bat "dotnet build --configuration Release -o Publish"
 
       }
@@ -83,9 +83,10 @@ node {
     // }
 
     if (env.BRANCH_NAME == "dev") {
+      def Powershell_V="%SystemRoot%\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
         stage('DEV: Deploy') {
-          bat "powershell Import-Module Webadministration"
-          bat "powershell -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
+          bat "${Powershell_V} Import-Module Webadministration"
+          bat "${Powershell_V} -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
         }
     }
 
