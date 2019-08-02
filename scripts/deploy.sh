@@ -26,7 +26,7 @@ CheckFile() {
 Main() {
   CheckFile
   systemctl daemon-reload
-  systemctl restart $SYSTEMD_FILE
+  systemctl restart netcore-$BRANCH_NAME-$DOMAIN.service
 }
 
 Main
