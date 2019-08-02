@@ -21,7 +21,8 @@ echo "Copying zip file"
 
 $BaseFileName = @(gci $PACKAGE_NAME | % {$_.BaseName})
 
-echo "$PACKAGE_NAME"
+echo "$PACKAGE_NAME, $BaseFileName"
+echo "$extractDestination\$BaseFileName"
 echo "Renaming DONE"
 
 $extractDestination = "$DOCDIR\Sites"
@@ -35,10 +36,10 @@ echo "Extraction DONE"
 #     New-Item IIS:\Sites\$serviceName -bindings @{protocol="http";bindingInformation=":80:" + $serviceName} -physicalPath $extractDestination\$BaseFileName
 # }
 
-Set-ItemProperty IIS:\Sites\$serviceName -name  physicalPath -value "$extractDestination\$BaseFileName"
+Set-ItemProperty IIS:\Sites\netcoreapi -name  physicalPath -value "$extractDestination\$BaseFileName"
 echo "Changed $serviceName SourePath in IIS..."
 
 echo "Restarting WebAppPool"
-Restart-WebAppPool $serviceName
+Restart-WebAppPool netcoreapi
 echo "WebAppPool Restarted"
 echo "DONE!!"
