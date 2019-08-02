@@ -4,8 +4,6 @@ def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.${SUBDOMAIN}.1.0.${env.BUILD_NU
 
 node {
     def remote = [:]
-    def app
-
 
     if (env.BRANCH_NAME == "dev") {
       stage('Cleaning ENV') {
