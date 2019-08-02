@@ -27,6 +27,7 @@ Main() {
   CheckFile
   systemctl daemon-reload
   systemctl restart netcore-$BRANCH_NAME-$DOMAIN.service
+  systemctl enable netcore-$BRANCH_NAME-$DOMAIN.service
 }
 
 Main

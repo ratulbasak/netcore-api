@@ -53,7 +53,7 @@ node {
 
 
 
-    /* This builds the solution **\\nupkgs\\*.nupkg */
+    /* This SSH Session deploys app into AppServer */
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AppServer',
     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
     {
@@ -71,8 +71,6 @@ node {
           sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/${SUBDOMAIN}*"
           sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${SUBDOMAIN}/"
           sshCommand remote: remote, command: "./deployments/systemd/deploy.sh ${SUBDOMAIN} ${env.BRANCH_NAME}"
-          // sshScript remote: remote, script: "scripts/deploy.sh ${SUBDOMAIN} ${env.BRANCH_NAME}"
-          // sshCommand remote: remote, command: "systemctl restart netcore-api.service"
           // for extracting into multiple directory: ${PACKAGE_NAME}
           //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
           //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
@@ -80,14 +78,5 @@ node {
       }
 
     }
-
-    // if (env.BRANCH_NAME == "dev") {
-    //   def Powershell_V="%SystemRoot%\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe"
-    //     stage('DEV: Deploy') {
-    //       bat "${Powershell_V} Import-Module Webadministration"
-    //       bat "${Powershell_V} GET-IISSite"
-    //       bat "${Powershell_V} -ExecutionPolicy RemoteSigned -File scripts/deploy.ps1 ${PACKAGE_NAME}.zip"
-    //     }
-    // }
 
 }
