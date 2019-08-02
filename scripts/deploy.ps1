@@ -1,7 +1,7 @@
 # Set-ExecutionPolicy -Scope CurrentUser Unrestricted -Force
 Import-Module Webadministration
 
-$PACKAGE_NAME = "$args[0]"
+$PACKAGE_NAME = "$args"
 
 $serviceName = "netcoreapi"
 $DOCDIR = "C:\netcore-api"
