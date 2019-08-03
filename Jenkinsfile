@@ -39,13 +39,25 @@ node {
       stage('DEV: Unit Test') {
         bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/netcore-api.sln\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
         step([$class: 'MSTestPublisher', testResultsFile:"Api.Test/TestResults/unit_tests.xml", failOnError: true, keepLongStdio: true])
-      }
-      stage('DEV: Pack') {
-          /* This will create zip */
-          zip zipFile: "${PACKAGE_NAME}.zip", archive: false, dir: 'Publish'
-          bat "dir"
+        def allTestPassed = allTestPass()
+        println "allTestPassed"
+    		if(allTestPassed == false)
+    		{
+    			// notifyBitbucket('FAILED')
+    			assert false
+    		}
+    		else
+    		{
+    			// notifyBitbucket('SUCCESS')
+          stage('DEV: Pack') {
+              /* This will create zip */
+              zip zipFile: "${PACKAGE_NAME}.zip", archive: false, dir: 'Publish'
+              bat "dir"
 
+          }
+    		}
       }
+
     }
 
 
@@ -75,4 +87,29 @@ node {
     //
     // }
 
+}
+
+
+def allTestPass() {
+    def testStatus = ""
+	def allTestPass = 0
+    AbstractTestResultAction testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
+    if (testResultAction != null) {
+        def total = testResultAction.totalCount
+        def failed = testResultAction.failCount
+        def skipped = testResultAction.skipCount
+        def passed = total - failed - skipped
+        testStatus = "Test Status:\n  Passed: ${passed}, Failed: ${failed} ${testResultAction.failureDiffString}, Skipped: ${skipped}"
+        if (failed == 0) {
+            currentBuild.result = 'SUCCESS'
+        }
+		allTestPass = (failed == 0)
+    }
+	else
+	{
+		testStatus = "Didn't find any tests..."
+		allTestPass = false
+	}
+	println testStatus
+    return allTestPass
 }
