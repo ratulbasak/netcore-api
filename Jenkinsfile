@@ -32,7 +32,8 @@ node {
       stage('DEV: Build') {
           /* This builds the solution */
           // bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x86"
-          bat "dotnet build netcore-api.sln --configuration Release -o Publish"
+          bat "dotnet build api/netcore-api.csproj --configuration Release -o Publish"
+          bat "dotnet build Api.Test/Api.Test.csproj --configuration Release -o Publish"
 
       }
       stage('DEV: Pack') {
