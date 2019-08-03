@@ -33,11 +33,11 @@ node {
           /* This builds the solution */
           // bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x86"
           bat "dotnet build api/netcore-api.csproj --configuration Release -o Publish"
-          bat "dotnet build Api.Test/Api.Test.csproj --configuration Release -o Publish"
+          bat "dotnet build Api.Test/Api.Test.csproj --configuration Debug"
 
       }
       stage('DEV: Build') {
-        bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/Api.Test/Publish/Api.Test.dll\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
+        bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/netcore-api.sln\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
         step([$class: 'MSTestPublisher', testResultsFile:"**/unit_tests.xml", failOnError: true, keepLongStdio: true])
       }
       stage('DEV: Pack') {
