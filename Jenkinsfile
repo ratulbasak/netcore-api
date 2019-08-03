@@ -22,6 +22,7 @@ node {
       stage('DEV: Restore Packages') {
           /* This restoring of the packages of the application. */
           bat "dotnet restore netcore-api.sln"
+          // bat "dotnet restore Api.Test/netcore-api.csproj"
       }
       stage('DEV: Clean') {
           /* This clean the solution. */
