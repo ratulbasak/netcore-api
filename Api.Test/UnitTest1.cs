@@ -12,7 +12,7 @@ namespace Api.Test
         {
             var controller = new ValuesController();
             var res = controller.Get(1);
-            Assert.AreEqual(res.Value, "Sunday");
+            Assert.AreEqual(res.Value, "Saturday");
             Console.Write("Lalu");
         }
     }
