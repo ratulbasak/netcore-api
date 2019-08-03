@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "netcore-api", "WebService\netcore-api.csproj", "{9D4DBE68-62A6-481D-9C62-3077DDBD870C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Test", "..\Api.Test\Api.Test.csproj", "{39DC2EDE-13DC-452C-9114-E06AD0912915}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Test", "Api.Test\Api.Test.csproj", "{39DC2EDE-13DC-452C-9114-E06AD0912915}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
