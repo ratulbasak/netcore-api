@@ -36,9 +36,9 @@ node {
           bat "dotnet build Api.Test/Api.Test.csproj --configuration Debug"
 
       }
-      stage('DEV: Build') {
+      stage('DEV: Unit Test') {
         bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/netcore-api.sln\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
-        step([$class: 'MSTestPublisher', testResultsFile:"**/unit_tests.xml", failOnError: true, keepLongStdio: true])
+        step([$class: 'MSTestPublisher', testResultsFile:"Api.Test/TestResults/unit_tests.xml", failOnError: true, keepLongStdio: true])
       }
       stage('DEV: Pack') {
           /* This will create zip */
