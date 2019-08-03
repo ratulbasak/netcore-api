@@ -39,7 +39,7 @@ node {
       }
       stage('DEV: Unit Test') {
         Printing = bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/netcore-api.sln\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
-        println(Printing)
+        println("Printing: $Printing")
         // step([$class: 'MSTestPublisher', testResultsFile:"Api.Test/TestResults/unit_tests.xml", failOnError: true, keepLongStdio: true])
 
         if ( (Printing != 0)  ){
