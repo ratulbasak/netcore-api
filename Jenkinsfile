@@ -36,6 +36,10 @@ node {
           bat "dotnet build Api.Test/Api.Test.csproj --configuration Release -o Publish"
 
       }
+      stage('DEV: Build') {
+        bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/netcore-api.sln\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
+        step([$class: 'MSTestPublisher', testResultsFile:"**/unit_tests.xml", failOnError: true, keepLongStdio: true])
+      }
       stage('DEV: Pack') {
           /* This will create zip */
           zip zipFile: "${PACKAGE_NAME}.zip", archive: false, dir: 'Publish'
@@ -45,35 +49,30 @@ node {
     }
 
 
-    stage('Test') {
-         bat "echo 'test passed'"
-    }
-
-
     /* This SSH Session deploys app into AppServer */
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AppServer',
-    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-    {
-      remote.name = 'appserver'
-      remote.host = "${env.ServerIP}"  //From ENVIRONMENT VARIABLE
-      remote.user = "${USERNAME}"
-      remote.password = "${PASSWORD}"
-      remote.allowAnyHosts = true
-      if (env.BRANCH_NAME == "dev") {
-        stage('DEV: Deploy Artifact') {
-          sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
-          sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
-        }
-        stage('DEV: Run Application') {
-          sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/${SUBDOMAIN}*"
-          sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${SUBDOMAIN}/"
-          sshCommand remote: remote, command: "./deployments/systemd/deploy.sh ${SUBDOMAIN} ${env.BRANCH_NAME}"
-          // for extracting into multiple directory: ${PACKAGE_NAME}
-          //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
-          //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
-        }
-      }
-
-    }
+    // withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AppServer',
+    // usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+    // {
+    //   remote.name = 'appserver'
+    //   remote.host = "${env.ServerIP}"  //From ENVIRONMENT VARIABLE
+    //   remote.user = "${USERNAME}"
+    //   remote.password = "${PASSWORD}"
+    //   remote.allowAnyHosts = true
+    //   if (env.BRANCH_NAME == "dev") {
+    //     stage('DEV: Deploy Artifact') {
+    //       sshPut remote: remote, from: "${PACKAGE_NAME}.zip", into: "deployments/packages/"
+    //       sshCommand remote: remote, command: "ls -al deployments/${env.BRANCH_NAME}/"
+    //     }
+    //     stage('DEV: Run Application') {
+    //       sshCommand remote: remote, command: "rm -rf deployments/${env.BRANCH_NAME}/${SUBDOMAIN}*"
+    //       sshCommand remote: remote, command: "unzip deployments/packages/${PACKAGE_NAME}.zip -d deployments/${env.BRANCH_NAME}/${SUBDOMAIN}/"
+    //       sshCommand remote: remote, command: "./deployments/systemd/deploy.sh ${SUBDOMAIN} ${env.BRANCH_NAME}"
+    //       // for extracting into multiple directory: ${PACKAGE_NAME}
+    //       //     sshGet remote: remote, from: 'abc.sh', into: 'bac.sh', override: true
+    //       //     sshRemove remote: remote, path: "deployments/${env.BRANCH_NAME}", failOnError: false
+    //     }
+    //   }
+    //
+    // }
 
 }
