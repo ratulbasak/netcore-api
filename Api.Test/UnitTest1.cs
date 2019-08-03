@@ -13,6 +13,8 @@ namespace Api.Test
             var controller = new ValuesController();
             var res = controller.Get(1);
             Assert.AreEqual(res.Value, "Saturday");
+            var res2 = controller.Get(7);
+            Assert.AreEqual(res2.Value, "Friday");
             Console.Write("Lalu");
         }
     }
