@@ -37,7 +37,7 @@ node {
 
       }
       stage('DEV: Build') {
-        bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/netcore-api.sln\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
+        bat returnStatus: true, script: "\"dotnet\" test \"${workspace}/Api.Test/Publish/Api.Test.dll\" --logger \"trx;LogFileName=unit_tests.xml\" --no-build"
         step([$class: 'MSTestPublisher', testResultsFile:"**/unit_tests.xml", failOnError: true, keepLongStdio: true])
       }
       stage('DEV: Pack') {
