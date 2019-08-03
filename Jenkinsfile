@@ -1,3 +1,4 @@
+import hudson.tasks.test.AbstractTestResultAction
 def SERVICE_NAME="netcoreapi"
 def SUBDOMAIN="sub0"
 def PACKAGE_NAME="${env.BRANCH_NAME}-netcore-api.${SUBDOMAIN}.1.0.${env.BUILD_NUMBER}"
