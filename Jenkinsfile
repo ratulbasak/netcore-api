@@ -21,17 +21,17 @@ node {
       }
       stage('DEV: Restore Packages') {
           /* This restoring of the packages of the application. */
-          bat "dotnet restore WebService/netcore-api.sln"
+          bat "dotnet restore netcore-api.sln"
       }
       stage('DEV: Clean') {
           /* This clean the solution. */
-          bat "dotnet clean WebService/netcore-api.sln"
+          bat "dotnet clean netcore-api.sln"
 
       }
       stage('DEV: Build') {
           /* This builds the solution */
           // bat "dotnet publish netcore-api.sln -o Publish -c Release -r win10-x86"
-          bat "dotnet build WebService/netcore-api.sln --configuration Release -o Publish"
+          bat "dotnet build netcore-api.sln --configuration Release -o Publish"
 
       }
       stage('DEV: Pack') {
