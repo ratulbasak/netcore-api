@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\netcore-api\netcore-api.csproj" />
+    <ProjectReference Include="..\api\netcore-api.csproj" />
   </ItemGroup>
 
 
